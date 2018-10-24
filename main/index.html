@@ -1,0 +1,78 @@
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="jquery.js"></script>
+  <script src="../lib/codemirror.js"></script>
+  <link rel="stylesheet" href="../lib/codemirror.css">
+  <script src="../mode/xml/xml.js"></script>
+  <script src="../mode/javascript/javascript.js"></script>
+  <script src="../mode/css/css.js"></script>
+  <script src="../mode/htmlmixed/htmlmixed.js"></script>
+  <script src="../addon/hint/show-hint.js"></script>
+  <script src="../addon/hint/xml-hint.js"></script>
+ <script src="../addon/hint/html-hint.js"></script>
+  <script src="../addon/hint/css-hint.js"></script>
+  <script src="../addon/edit/closetag.js"></script>
+  <script src="../addon/edit/closebrackets.js"></script>
+  <link rel="stylesheet" href="../addon/hint/show-hint.css">
+  <link rel="stylesheet" href="../theme/icecoder.css">
+
+  <link rel="stylesheet" href="index.css">
+  <script src="index.js"></script>
+  <style>
+  body {
+    background-color: #eee;
+  }
+</style>
+</head>
+
+<body>
+  <div class = "row">
+    <div class="column" style="background-color:#aaa;">
+    <iframe id=preview></iframe>
+  </div>
+  <div class="column" id="textEditor">
+  </div>
+  </div>
+
+  <script>
+  var delay;
+  var editor = CodeMirror(document.getElementById("textEditor"), {
+    value: codevalue2,
+    mode:  "text/html",
+    htmlmode: true,
+   theme: "icecoder",
+    lineNumbers: true,
+    autofocus: true,
+    extraKeys: {"Ctrl-Space": "autocomplete"},
+    autoCloseTags: true,
+    autoCloseBrackets: true,
+  });
+
+  // Live preview
+editor.on("change", function() {
+    clearTimeout(delay);
+    delay = setTimeout(updatePreview, 100);
+});
+
+function updatePreview() {
+    var previewFrame = document.getElementById('preview');
+    var preview =  previewFrame.contentDocument ||  previewFrame.contentWindow.document;
+    preview.open();
+    preview.write(editor.getValue());
+    preview.close();
+}
+setTimeout(updatePreview, 100);
+
+function destroyClickedElement(event) {
+    document.body.removeChild(event.target);}
+
+function DivGen() {
+  editor.replaceRange(
+       '<div class="gendiv">gendiv</div>\n', editor.getCursor());
+  }
+  </script>
+</body>
+
+</html>
